@@ -1,6 +1,7 @@
 /* ============================ STACKS ============================ */
 TOPICS.push({
 id:'s1', mod:'stacks', title:'Stack ADT and implementations', odds:'high', time:'10 min',
+ex:['pp1d5'],
 idea:`A stack is <b>LIFO</b>: only the most recently pushed element (the <b>top</b>) can be removed. Four operations: <code>push, pop, empty, full</code>. Linked version: a single <code>top</code> pointer. Array version: an index <code>top</code> starting at -1. All O(1).`,
 points:[
  `<b>Linked:</b> <code>push</code> = new node whose <code>next</code> is the old top, then top = new node. <code>pop</code> = save top.data, <code>top = top.next</code>. <code>empty: top == null</code>, <code>full: false</code>.`,
@@ -144,6 +145,7 @@ return (count == 0)                       // no leftover openers`,
 
 TOPICS.push({
 id:'s3', mod:'stacks', title:'Postfix evaluation and infix to postfix', odds:'high', time:'20 min',
+ex:['pp3d1','pp3d2'],
 idea:`<b>Evaluate postfix:</b> read left to right; a number is pushed; an operator pops two operands (the first popped is the <u>right</u> operand), computes, pushes the result. <b>Infix to postfix:</b> operands go straight to the output; operators wait on a stack and are popped when an operator of <u>higher or equal precedence</u> is on top.`,
 points:[
  `<b>Operand order:</b> for <code>a b -</code>, pop gives <code>b</code> first, then <code>a</code>; compute <code>a - b</code>. The same for <code>/</code> and <code>%</code>.`,
@@ -221,6 +223,7 @@ Check: 4 + (9-6)%3 + 5*(2+2) - 1 = 4 + 0 + 20 - 1 = 23`,
 
 TOPICS.push({
 id:'s4', mod:'stacks', title:'Stack coding: temp stack and recursion', odds:'high', time:'20 min',
+ex:['pp1d1','pp1d5'],
 idea:`Stack questions are solved with two tools. <b>A temporary stack</b> (pop out, push back, reversing twice restores the order) or <b>recursion</b> (the call stack remembers each popped element; you push it back <u>after</u> the recursive call returns).`,
 points:[
  `<b>Temp stack template:</b> pop everything into <code>tmp</code>, process while moving, then pop <code>tmp</code> back into the original. The order is restored because reversal happens twice.`,

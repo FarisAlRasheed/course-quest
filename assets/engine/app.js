@@ -38,11 +38,14 @@ let toastT;
 function toast(msg){ const el = $('#toast'); el.textContent = msg; el.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('show'), 2300); }
 
 /* ---------- stats and coverage ---------- */
+function findDrill(id){ let r = null; TOPICS.forEach(t => t.drills.forEach(d => { if (d.id === id) r = d; })); return r; }
+function tdr(t){ return (t.ex || []).map(findDrill).filter(Boolean).concat(t.drills); }
+function originTag(d){ return d.real ? '<span class="tag hot">real exam</span>' : /^(Problem set|Tutorial|Practice exam)/.test(d.src) ? '<span class="tag">course set</span>' : '<span class="tag">extra practice</span>'; }
 function tstats(t){
-  const qa = S.quiz[t.id] || {}, pn = (t.points || []).length, qn = t.quiz.length, dn = t.drills.length;
+  const qa = S.quiz[t.id] || {}, pn = (t.points || []).length, qn = t.quiz.length, DR = tdr(t), dn = DR.length;
   let qok = 0, qdone = 0, qbad = 0, dgot = 0, dretry = 0, seen = 0;
   t.quiz.forEach((_, i) => { if (qa[i]) { qdone++; if (qa[i].ok) qok++; else qbad++; } });
-  t.drills.forEach(d => { const v = S.drill[d.id]; if (v === 'got') dgot++; else if (v === 'retry') dretry++; });
+  DR.forEach(d => { const v = S.drill[d.id]; if (v === 'got') dgot++; else if (v === 'retry') dretry++; });
   for (let i = 0; i < pn; i++) if (S.seen[t.id + ':' + i]) seen++;
   const wq = qn ? .45 : 0, wd = dn ? .45 : 0, wp = pn ? .10 : 0, sw = wq + wd + wp || 1;
   const p = Math.round(100 * ((qn ? wq * qok / qn : 0) + (dn ? wd * dgot / dn : 0) + (pn ? wp * seen / pn : 0)) / sw);
@@ -323,7 +326,7 @@ function learnBody(t, o){
 function learnHTML(t){
   const i = TOPICS.indexOf(t), nx = TOPICS[i + 1];
   return learnBody(t) + '<div class="cta-row"><button class="btn red" data-act="readgo">' + (tstats(t).seen >= tstats(t).pn ? 'Go to the quiz' : 'Got it. Quiz me') + '</button>' +
-    (t.drills.length ? '<button class="btn ghost" data-act="tab" data-tab="drills">Skip to written answers</button>' : '') +
+    (tdr(t).length ? '<button class="btn ghost" data-act="tab" data-tab="drills">Skip to written answers</button>' : '') +
     (nx ? '<a class="btn ghost" href="#' + nx.id + '" data-go="' + nx.id + '">Next: ' + esc(nx.title) + '</a>' : '') + '</div>';
 }
 
@@ -368,7 +371,7 @@ function quizHTML(t, ctx, idxs){
 /* written answers */
 function drillCard(d, exam){
   const r = REV[d.id] || {}, v = S.drill[d.id], all = exam && r.all;
-  let h = '<div class="drill" id="dr-' + d.id + '"><div class="drill-h"><h3>' + esc(d.title) + '</h3>' + (d.real ? '<span class="tag hot">real paper</span>' : '') + '<span class="tag">' + esc(d.src) + '</span><span class="tag">' + d.time + '</span>' +
+  let h = '<div class="drill" id="dr-' + d.id + '"><div class="drill-h"><h3>' + esc(d.title) + '</h3>' + originTag(d) + '<span class="tag">' + esc(d.src) + '</span><span class="tag">' + d.time + '</span>' +
     (v === 'got' ? '<span class="tag ok">nailed</span>' : v === 'retry' ? '<span class="tag retry">another pass</span>' : '') + '</div><div class="drill-b"><div class="q">' + d.q + '</div>';
   if (exam && !all) h += '<div class="reveal"><button class="rbtn" data-act="exreveal" data-id="' + d.id + '">Check my answer</button></div>';
   else {
@@ -386,9 +389,17 @@ function drillCard(d, exam){
   return h + '</div></div>';
 }
 function drillsHTML(t){
-  if (!t.drills.length) return '<div class="note"><p class="muted">No long written question for this topic. The quiz covers it.</p></div>';
-  const list = t.drills.filter(d => !(S.onlyLeft && S.drill[d.id] === 'got'));
-  return '<p class="muted small" style="margin:0 0 14px">Write the answer on paper first, like in the exam. Then open the three hints in order: what it tests, how to attack it, the model answer.</p>' + (list.length ? list.map(d => drillCard(d, false)).join('') : '<div class="note"><p>All written answers here are done. Nice.</p></div>');
+  const all = tdr(t), nex = (t.ex || []).length;
+  const noExam = !all.some(d => d.real);
+  if (!all.length) return '<div class="note"><p class="muted">No long written question for this topic. The quiz covers it.</p></div>';
+  const keep = d => !(S.onlyLeft && S.drill[d.id] === 'got');
+  const ex = all.filter(d => d.real).filter(keep), rest = all.filter(d => !d.real).filter(keep);
+  let h = '<p class="muted small" style="margin:0 0 14px">Write the answer on paper first, like in the exam. Then open the three hints in order: what it tests, how to attack it, the model answer.</p>';
+  if (ex.length) h += '<div class="sec">From the real exams</div>' + ex.map(d => drillCard(d, false)).join('');
+  if (noExam) h += '<div class="note"><p>No past midterm asked a long written question on this topic. It shows up in the circle-one block and the quizzes. The questions below come from the course problem sets and tutorials.</p></div>';
+  if (rest.length) h += '<div class="sec">' + (ex.length ? 'More practice (course sets)' : 'Practice from the course sets') + '</div>' + rest.map(d => drillCard(d, false)).join('');
+  if (!ex.length && !rest.length) h += '<div class="note"><p>All written answers here are done. Nice.</p></div>';
+  return h;
 }
 function pageHead(t, label){
   const m = modOf(t.mod), s = tstats(t);

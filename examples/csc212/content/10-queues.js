@@ -1,6 +1,7 @@
 /* ============================ QUEUES ============================ */
 TOPICS.push({
 id:'q1', mod:'queues', title:'Queue ADT and linked queue', odds:'high', time:'10 min',
+ex:['pp1d5'],
 idea:`A queue is <b>FIFO</b>: elements enter at the <b>tail</b> and leave from the <b>head</b>. The interface has four operations: <code>enqueue, serve, length, full</code>. The linked version keeps <code>head</code>, <code>tail</code> and <code>size</code>, so everything is O(1).`,
 points:[
  `<b>enqueue(e):</b> add at the tail. <b>serve():</b> remove and return the head element. <b>length():</b> number of elements. <b>full():</b> always false for the linked version.`,
@@ -146,6 +147,7 @@ public void remove(int k) {
 
 TOPICS.push({
 id:'q3', mod:'queues', title:'User-of-ADT queue methods: the cycle trick', odds:'high', time:'16 min',
+ex:['pp1d1','pp1d2','pp1d3','pp1d4'],
 idea:`Almost every "user of the Queue ADT" question uses one idea: <b>serve each of the <code>n</code> elements once and enqueue it back (or not)</b>. After exactly <code>n</code> rounds the queue is back in its original order, with whatever you filtered, swapped or inspected along the way.`,
 points:[
  `<b>Fix n first:</b> <code>int n = q.length();</code> and loop <code>for (i &lt; n)</code>. If you test <code>q.length()</code> in the loop condition while enqueuing back, the loop never ends.`,

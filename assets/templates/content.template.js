@@ -40,6 +40,7 @@ quiz:[                   // 3 to 6 questions. o = options, a = index of the righ
  {q:`Question text?`, o:[`Option one`,`Option two`,`Option three`,`Option four`], a:1, w:`Why option two is right and the common wrong pick fails.`}
  // Put "None of the above" LAST in o: the engine keeps it last when it shuffles.
 ],
+ex:['pp1d1'],            // optional: ids of real past-exam drills (from the Past-paper chapter) to show first in this topic's Write tab
 drills:[                 // written / long-form exam questions
  {id:'t1d1',            // unique across the whole site
   real:true,            // true only if it is a REAL past-paper question; the mock paper prefers these

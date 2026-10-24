@@ -1,6 +1,7 @@
 /* ============================ PERFORMANCE ============================ */
 TOPICS.push({
 id:'p1', mod:'perf', title:'Big-O rules and simplification', odds:'high', time:'10 min',
+ex:['pp4d1'],
 idea:`<code>f(n)</code> is <code>O(g(n))</code> if there are constants <code>c &gt; 0</code> and <code>n0</code> such that <code>f(n) &le; c&middot;g(n)</code> for all <code>n &ge; n0</code>. In practice: <b>keep the fastest-growing term, drop its constant</b>.`,
 points:[
  `<b>Growth order (slow to fast):</b> <code>1 &lt; log n &lt; n &lt; n log n &lt; n&sup2; &lt; n&sup3; &lt; 2&#8319; &lt; n! &lt; n&#8319;</code>.`,
@@ -68,6 +69,7 @@ drills:[
 
 TOPICS.push({
 id:'p2', mod:'perf', title:'Counting frequencies line by line', odds:'high', time:'14 min',
+ex:['pp4d1'],
 idea:`The exam asks for the frequency of <b>each line</b> as a formula in n, then the total and its O. The rule: a <code>for</code> header runs <b>iterations + 1</b> times (the last check fails), and the body runs <b>iterations</b> times. When the inner loop depends on <code>i</code>, sum over i.`,
 points:[
  `<b>Header vs body.</b> <code>for (i=1; i&lt;=n; i++)</code>: header n + 1, body n.`,
@@ -152,6 +154,7 @@ Total:  2 n log n + 4n + 3        -> O(n log n)`,
 
 TOPICS.push({
 id:'p3', mod:'perf', title:'Loop patterns, best and worst case, space', odds:'med', time:'12 min',
+ex:['pp4d1'],
 idea:`Most exam loops reduce to a few shapes. Recognise the shape and write the answer without summing from scratch. Also be ready to give <b>best and worst case inputs</b> and the <b>space</b> used beyond the input.`,
 points:[
  `<b>Space complexity</b> = maximum extra memory used at any time, ignoring the input. A function with a few variables is O(1) space; one that allocates an array of size n is O(n).`,

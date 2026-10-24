@@ -90,6 +90,7 @@ drills:[
 
 TOPICS.push({
 id:'l2', mod:'lists', title:'Linked list implementation', odds:'high', time:'15 min',
+ex:['pp2d3'],
 idea:`<code>LinkedList</code> keeps <code>head</code> and <code>current</code> pointers over <code>Node(data, next)</code>. Almost everything is O(1). The only work is <code>insert</code> (relink three pointers in the right order) and <code>remove</code> (needs the <u>predecessor</u>, so it is O(n)).`,
 points:[
  `<b>Cheap operations:</b> <code>empty: head==null</code>, <code>last: current.next==null</code>, <code>full: false</code>, <code>findFirst: current=head</code>, <code>findNext: current=current.next</code>, <code>retrieve/update: current.data</code>.`,
@@ -269,6 +270,7 @@ public void findLast() {
 
 TOPICS.push({
 id:'l5', mod:'lists', title:'Doubly linked list', odds:'high', time:'14 min',
+ex:['pp2d4'],
 idea:`Each node has <code>previous</code> and <code>next</code>. That makes <code>findPrevious</code> and <code>remove</code> O(1), but every insert/delete must keep <u>both</u> directions consistent, and the first and last nodes have a null on one side.`,
 points:[
  `<code>first()</code> is <code>current.previous == null</code>; <code>last()</code> is <code>current.next == null</code>.`,
@@ -374,6 +376,7 @@ drills:[
 
 TOPICS.push({
 id:'l6', mod:'lists', title:'Writing methods as a user of the List ADT', odds:'high', time:'15 min',
+ex:['pp2d4','pp2d5'],
 idea:`With only <code>findFirst/findNext/retrieve/insert/remove/last/empty</code>, you build every algorithm from three moves: <b>walk</b> to a position, <b>take</b> an element out (retrieve + remove), <b>put</b> it somewhere (go to last + insert).`,
 points:[
  `<b>Append = go to the last element, then <code>insert</code>.</b> Insert always goes after current.`,
@@ -475,6 +478,7 @@ drills:[
 
 TOPICS.push({
 id:'l7', mod:'lists', title:'Member methods: pointer surgery', odds:'high', time:'18 min',
+ex:['pp2d1','pp2d2','pp2d3'],
 idea:`"Member of the class" means you work directly on <code>head</code>, <code>next</code>, <code>previous</code>. The exam usually adds "do not call other methods" and "no auxiliary structures". The marks are in choosing the right stopping node and relinking in a safe order.`,
 points:[
  `<b>Five-step routine.</b> (1) Draw before and after. (2) Name the nodes you need (<code>p</code>, <code>q</code>). (3) Loop to reach them. Stop at the <i>predecessor</i> when you will modify its <code>next</code>. (4) Relink, new node first. (5) Fix <code>head</code> and <code>current</code>, and test empty, one node, head and tail cases.`,
@@ -553,6 +557,7 @@ drills:[
 
 TOPICS.push({
 id:'l8', mod:'lists', title:'Recursion on lists', odds:'med', time:'12 min',
+ex:['pp2d5'],
 idea:`Two recursion shapes. On <b>nodes</b>: a private helper takes a <code>Node p</code> and recurses on <code>p.next</code>, with base case <code>p == null</code>; the public method just calls it with <code>head</code>. As a <b>user of the ADT</b>: current is the moving index; the base case is <code>l.last()</code> and you call <code>findNext()</code> before recursing.`,
 points:[
  `<b>Pattern for node recursion:</b> base case, recurse on the rest, combine.`,
